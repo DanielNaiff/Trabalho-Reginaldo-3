@@ -18,7 +18,7 @@ public class Principal {
         janela.add(tela);
 
         // Ajustando o tamanho inicial da janela e centralizando
-        janela.setSize(800, 600); // Tamanho inicial da janela
+        janela.setSize(528, 720); // Tamanho inicial da janela
         janela.setLocationRelativeTo(null); // A janela será centralizada na tela
 
         // Tornando a janela visível

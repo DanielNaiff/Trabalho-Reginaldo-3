@@ -10,6 +10,7 @@ public class Tela extends JPanel implements Runnable {
     private long ultimaAtualizacao;
     private final int FPS = 60; // Frames por segundo desejados
     private final double intervalo = 1000000000.0 / FPS; // Intervalo entre frames em nanosegundos
+    Tabuleiro tabuleiro = new Tabuleiro();
 
     public Tela() {
         setLayout(new BorderLayout()); // Usando BorderLayout como exemplo
@@ -20,6 +21,10 @@ public class Tela extends JPanel implements Runnable {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        Graphics2D graphics2D = (Graphics2D)g;
+
+        tabuleiro.desenhar(graphics2D);
     }
 
     public void carregarJogo() {
