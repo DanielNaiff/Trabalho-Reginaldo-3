@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 public class Tela extends JPanel implements Runnable {
 
+    boolean isMover;
+    boolean isQuadrante;
+
     Interagir interagir = new Interagir();
     static Thread threadJogo;
     private boolean executando;
@@ -52,21 +55,22 @@ public class Tela extends JPanel implements Runnable {
 
         // Verifica se existe uma peça selecionada
         if(pecaSelecionada != null) {
-            // Define a cor de desenho para branco (geralmente, isso seria para desenhar um contorno ou um destaque)
-            graphics2D.setColor(Color.pink);
+            if(isMover){
+                // Define a cor de desenho para branco (geralmente, isso seria para desenhar um contorno ou um destaque)
+                graphics2D.setColor(Color.pink);
 
-            // Define o nível de transparência para 0, ou seja, 100% de transparência (totalmente invisível)
-            // Isso provavelmente é feito para apagar qualquer forma anterior da peça antes de desenhá-la na nova posição
-            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.f));
+                // Define o nível de transparência para 0, ou seja, 100% de transparência (totalmente invisível)
+                // Isso provavelmente é feito para apagar qualquer forma anterior da peça antes de desenhá-la na nova posição
+                graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.f));
 
-            // Desenha um retângulo na posição da peça selecionada
-            // O retângulo é desenhado nas coordenadas relativas ao tabuleiro, com o tamanho definido pela constante 'Tabuleiro.tamanho'
-            // Isso apagaria qualquer forma anterior que tivesse sido desenhada na posição da peça
-            graphics2D.fillRect(pecaSelecionada.coluna * Tabuleiro.tamanho, pecaSelecionada.linha * Tabuleiro.tamanho, Tabuleiro.tamanho, Tabuleiro.tamanho);
+                // Desenha um retângulo na posição da peça selecionada
+                // O retângulo é desenhado nas coordenadas relativas ao tabuleiro, com o tamanho definido pela constante 'Tabuleiro.tamanho'
+                // Isso apagaria qualquer forma anterior que tivesse sido desenhada na posição da peça
+                graphics2D.fillRect(pecaSelecionada.coluna * Tabuleiro.tamanho, pecaSelecionada.linha * Tabuleiro.tamanho, Tabuleiro.tamanho, Tabuleiro.tamanho);
 
-            // Restaura a transparência para 100% (opacidade total), garantindo que os próximos desenhos não sejam transparentes
-            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-
+                // Restaura a transparência para 100% (opacidade total), garantindo que os próximos desenhos não sejam transparentes
+                graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            }
             //Desenha a peca selecionada
             pecaSelecionada.desenhar(graphics2D);
         }
@@ -75,11 +79,27 @@ public class Tela extends JPanel implements Runnable {
 
     //se uma peca esta sendo segurada, mantem a posicao
     private void simular(){
+
+        //Resetar a lista de pecas
+        copiarPecas(pecas, copiaPecas);
+
         pecaSelecionada.x = interagir.x - Tabuleiro.tamanho/2;
         pecaSelecionada.y = interagir.y - Tabuleiro.tamanho/2;
 
         pecaSelecionada.coluna = pecaSelecionada.getColuna(pecaSelecionada.x);
         pecaSelecionada.linha = pecaSelecionada.getLinha(pecaSelecionada.y);
+
+        isMover = false;
+        isQuadrante = false;
+
+        if(pecaSelecionada.movimento(pecaSelecionada.coluna, pecaSelecionada.linha)){
+            isQuadrante = true;
+
+            if(pecaSelecionada.peçaColidida != null){
+                copiaPecas.remove(pecaSelecionada.peçaColidida.getIndex());
+            }
+            isMover = true;
+        }
     }
 
     private void atualizar() {
@@ -104,8 +124,15 @@ public class Tela extends JPanel implements Runnable {
 
         if(interagir.clicou == false){
             if(pecaSelecionada != null){
-                pecaSelecionada.atualizarPosicao();
-                pecaSelecionada = null;
+                if(isQuadrante){
+                    //atualiza a peca caso dela ter sido capturada e removida durante a simulacao
+                    copiarPecas(copiaPecas,pecas);
+                    pecaSelecionada.atualizarPosicao();
+                }else {
+                    copiarPecas(pecas, copiaPecas);
+                    pecaSelecionada.resetarPosicao();
+                    pecaSelecionada = null;
+                }
             }
         }
     }
@@ -183,7 +210,7 @@ public class Tela extends JPanel implements Runnable {
         pecas.add(new Bispo(branco, 2, 7));
         pecas.add(new Bispo(branco, 5, 7));
         pecas.add(new Rainha(branco, 3, 7));
-        pecas.add(new Rei(branco, 4, 7));
+        pecas.add(new Rei(branco, 4, 4));
 
 
     }

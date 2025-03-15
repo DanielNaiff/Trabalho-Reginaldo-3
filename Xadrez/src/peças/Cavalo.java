@@ -12,4 +12,16 @@ public class Cavalo extends Peça{
             png = getPng("/peça/cavalo-black");
         }
     }
+
+    public boolean movimento(int colunaAlvo, int linhaAlvo){
+        if(isNaLinha(colunaAlvo, linhaAlvo)){
+            if(Math.abs(colunaAlvo - preColuna) * Math.abs(linhaAlvo - preLinha) == 2 ){
+
+                if(estaNoQuadranteValido(colunaAlvo, linhaAlvo)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

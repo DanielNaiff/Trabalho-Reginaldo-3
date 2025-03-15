@@ -11,4 +11,16 @@ public class Rei extends Peça{
             png = getPng("/peça/rei-black");
         }
     }
+
+    public boolean movimento(int colunaAlvo, int linhaAlvo){
+        if(isNaLinha(colunaAlvo, linhaAlvo)){
+            if(Math.abs(colunaAlvo - preColuna) + Math.abs(linhaAlvo - preLinha) == 1 || Math.abs(colunaAlvo - preColuna)*Math.abs(linhaAlvo - preLinha) == 1){
+
+                if(estaNoQuadranteValido(colunaAlvo, linhaAlvo)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
