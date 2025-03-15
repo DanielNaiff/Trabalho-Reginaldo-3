@@ -183,6 +183,17 @@ private void roque(){
                             roque.atualizarPosicao();
                         }
 
+                        // Verifica se o rei adversário está em xeque após o movimento
+                        int corAdversario = (corAtual == branco) ? preto : branco;
+                        if (reiEmXeque(corAdversario)) {
+                            JOptionPane.showMessageDialog(
+                                    this, // Componente pai (a tela do jogo)
+                                    "Xeque! O rei adversário está em perigo.", // Mensagem
+                                    "Xeque", // Título da janela
+                                    JOptionPane.WARNING_MESSAGE // Tipo de mensagem
+                            );
+                        }
+
                         if (promover()) {
                             promocaoPendente = true;
                         } else {
@@ -205,7 +216,30 @@ private void roque(){
             }
         }
     }
-    
+    private boolean reiEmXeque(int cor) {
+        // Encontra o rei da cor especificada
+        Peça rei = null;
+        for (Peça peça : copiaPecas) {
+            if (peça.tipo == TipoPeca.REI && peça.cor == cor) {
+                rei = peça;
+                break;
+            }
+        }
+
+        if (rei == null) {
+            return false; // Rei não encontrado (não deveria acontecer)
+        }
+
+        // Verifica se alguma peça adversária pode atacar o rei
+        for (Peça peça : copiaPecas) {
+            if (peça.cor != cor && peça.podeMovimentar(rei.coluna, rei.linha)) {
+                return true; // Rei está em xeque
+            }
+        }
+
+        return false; // Rei não está em xeque
+    }
+
     private void promovendo() {
         if (interagir.clicou) {
             for (Peça peça : pecasPromovidas) {
