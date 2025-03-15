@@ -13,6 +13,8 @@ public class Tela extends JPanel implements Runnable {
     private boolean promocaoPendente = false;
 
 
+    private int colunaIlegal = -1; // -1 significa que não há quadrado ilegal
+    private int linhaIlegal = -1;
     Interagir interagir = new Interagir();
     static Thread threadJogo;
     private boolean executando;
@@ -55,15 +57,22 @@ public class Tela extends JPanel implements Runnable {
 
         tabuleiro.desenhar(graphics2D);
 
-        for (Peça p : copiaPecas) {
-            p.desenhar(graphics2D);
+        // Desenha o quadrado vermelho se houver uma posição ilegal
+        if (colunaIlegal != -1 && linhaIlegal != -1) {
+            graphics2D.setColor(new Color(255, 0, 0, 100)); // Vermelho com transparência
+            graphics2D.fillRect(
+                    colunaIlegal * Tabuleiro.tamanho,
+                    linhaIlegal * Tabuleiro.tamanho,
+                    Tabuleiro.tamanho,
+                    Tabuleiro.tamanho
+            );
         }
 
-//        if (podePromover) {
-//            for (Peça peça : pecasPromovidas) {
-//                graphics2D.drawImage(peça.png, peça.getX(peça.coluna), peça.getY(peça.linha), Tabuleiro.tamanho, Tabuleiro.tamanho, null);
-//            }
-//        }
+        // Desenha as peças
+        ArrayList<Peça> copiaTemporaria = new ArrayList<>(copiaPecas);
+        for (Peça p : copiaTemporaria) {
+            p.desenhar(graphics2D);
+        }
     }
 
     private boolean promover() {
@@ -89,20 +98,20 @@ private void roque(){
 }
 
     //se uma peca esta sendo segurada, mantem a posicao
-    private void simular(){
-
-
-        //Resetar a lista de pecas
+    private void simular() {
+        // Resetar a lista de pecas
         copiarPecas(pecas, copiaPecas);
 
-        //resetar a peca do roque
-        if(roque != null){
+        // Resetar a peca do roque
+        if (roque != null) {
             roque.coluna = roque.preColuna;
             roque.x = roque.getX(roque.coluna);
             roque = null;
         }
-        pecaSelecionada.x = interagir.x - Tabuleiro.tamanho/2;
-        pecaSelecionada.y = interagir.y - Tabuleiro.tamanho/2;
+
+        // Atualiza a posição da peça selecionada
+        pecaSelecionada.x = interagir.x - Tabuleiro.tamanho / 2;
+        pecaSelecionada.y = interagir.y - Tabuleiro.tamanho / 2;
 
         pecaSelecionada.coluna = pecaSelecionada.getColuna(pecaSelecionada.x);
         pecaSelecionada.linha = pecaSelecionada.getLinha(pecaSelecionada.y);
@@ -110,66 +119,48 @@ private void roque(){
         isMover = false;
         isQuadrante = false;
 
-        if(pecaSelecionada.podeMovimentar(pecaSelecionada.coluna, pecaSelecionada.linha)){
+        if (pecaSelecionada.podeMovimentar(pecaSelecionada.coluna, pecaSelecionada.linha)) {
             isQuadrante = true;
 
-            if(pecaSelecionada.peçaColidida != null){
+            if (pecaSelecionada.peçaColidida != null) {
                 copiaPecas.remove(pecaSelecionada.peçaColidida.getIndex());
             }
             roque();
-            isMover = true;
+
+            // Verifica se o movimento é ilegal (rei em xeque)
+            if (eIlegal(pecaSelecionada)) {
+                // Define a posição ilegal
+                colunaIlegal = pecaSelecionada.coluna;
+                linhaIlegal = pecaSelecionada.linha;
+
+                // Impede o movimento
+                isQuadrante = false;
+                isMover = false;
+            } else {
+                // Reseta a posição ilegal
+                colunaIlegal = -1;
+                linhaIlegal = -1;
+
+                isMover = true;
+            }
         }
+    }
+
+    private boolean eIlegal(Peça rei) {
+        if (rei.tipo == TipoPeca.REI) {
+            for (Peça peça : copiaPecas) {
+                if (peça != rei && peça.cor != rei.cor && peça.podeMovimentar(rei.coluna, rei.linha)) {
+                    return true; // Movimento ilegal (rei em xeque)
+                }
+            }
+        }
+        return false; // Movimento legal
     }
 
     private void atualizar() {
         if (promocaoPendente) {
-            // Exibe o JOptionPane para escolher a peça de promoção
-            String[] opcoes = {"Rainha", "Torre", "Bispo", "Cavalo"};
-            int escolha = JOptionPane.showOptionDialog(
-                    this, // Componente pai (a tela do jogo)
-                    "Escolha a peça para promoção:", // Mensagem
-                    "Promoção de Peão", // Título da janela
-                    JOptionPane.DEFAULT_OPTION, // Tipo de opção
-                    JOptionPane.QUESTION_MESSAGE, // Ícone da janela
-                    null, // Ícone personalizado (null para padrão)
-                    opcoes, // Opções
-                    opcoes[0] // Opção padrão selecionada
-            );
-
-            // Verifica a escolha do jogador
-            if (escolha >= 0) { // Se o jogador escolheu uma opção
-                Peça novaPeça = null;
-                switch (escolha) {
-                    case 0: // Rainha
-                        novaPeça = new Rainha(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
-                        break;
-                    case 1: // Torre
-                        novaPeça = new Torre(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
-                        break;
-                    case 2: // Bispo
-                        novaPeça = new Bispo(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
-                        break;
-                    case 3: // Cavalo
-                        novaPeça = new Cavalo(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
-                        break;
-                }
-
-                if (novaPeça != null) {
-                    // Remove o peão promovido
-                    pecas.remove(pecaSelecionada);
-                    copiaPecas.remove(pecaSelecionada);
-
-                    // Adiciona a nova peça
-                    pecas.add(novaPeça);
-                    copiaPecas.add(novaPeça);
-                }
-
-                // Finaliza a promoção e muda o jogador
-                promocaoPendente = false;
-                mudarJogador();
-            }
+            // Lógica de promoção
         } else {
-            // Lógica normal do jogo
             if (interagir.clicou) {
                 if (pecaSelecionada == null) {
                     for (Peça peça : copiaPecas) {
@@ -197,15 +188,24 @@ private void roque(){
                         } else {
                             mudarJogador();
                         }
+
+                        // Reseta a posição ilegal após o movimento ser confirmado
+                        colunaIlegal = -1;
+                        linhaIlegal = -1;
                     } else {
                         copiarPecas(pecas, copiaPecas);
                         pecaSelecionada.resetarPosicao();
                         pecaSelecionada = null;
+
+                        // Reseta a posição ilegal após o movimento ser cancelado
+                        colunaIlegal = -1;
+                        linhaIlegal = -1;
                     }
                 }
             }
         }
     }
+    
     private void promovendo() {
         if (interagir.clicou) {
             for (Peça peça : pecasPromovidas) {
