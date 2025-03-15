@@ -10,6 +10,7 @@ public class Tela extends JPanel implements Runnable {
 
     boolean isMover;
     boolean isQuadrante;
+    private boolean promocaoPendente = false;
 
 
     Interagir interagir = new Interagir();
@@ -29,6 +30,7 @@ public class Tela extends JPanel implements Runnable {
     public static ArrayList<Peça> pecas = new ArrayList<>();
     public static ArrayList<Peça> copiaPecas = new ArrayList<>();
     ArrayList<Peça> pecasPromovidas = new ArrayList<>();
+    boolean podePromover;
 
 
 
@@ -41,31 +43,33 @@ public class Tela extends JPanel implements Runnable {
 
 
         setPecas();
+
         copiarPecas(pecas, copiaPecas);
     }
 
-   @Override
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        Graphics2D graphics2D = (Graphics2D)g;
+        Graphics2D graphics2D = (Graphics2D) g;
 
         tabuleiro.desenhar(graphics2D);
 
-        for(Peça p: copiaPecas){
+        for (Peça p : copiaPecas) {
             p.desenhar(graphics2D);
         }
 
+//        if (podePromover) {
+//            for (Peça peça : pecasPromovidas) {
+//                graphics2D.drawImage(peça.png, peça.getX(peça.coluna), peça.getY(peça.linha), Tabuleiro.tamanho, Tabuleiro.tamanho, null);
+//            }
+//        }
     }
 
-    private boolean promover(){
-        if(pecaSelecionada.tipo == TipoPeca.PEAO){
-            if(corAtual == branco && pecaSelecionada.linha == 0 || corAtual == preto && pecaSelecionada.linha == 7){
-                pecasPromovidas.clear();
-                pecasPromovidas.add(new Torre(corAtual, 9, 2));
-                pecasPromovidas.add(new Cavalo(corAtual, 9 ,3));
-                pecasPromovidas.add(new Bispo(corAtual, 9, 4));
-                pecasPromovidas.add(new Rainha(corAtual, 9 ,5));
+    private boolean promover() {
+        if (pecaSelecionada != null && pecaSelecionada.tipo == TipoPeca.PEAO) {
+            if (corAtual == branco && pecaSelecionada.linha == 0 || corAtual == preto && pecaSelecionada.linha == 7) {
+                promocaoPendente = true; // Define que há uma promoção pendente
                 return true;
             }
         }
@@ -118,40 +122,124 @@ private void roque(){
     }
 
     private void atualizar() {
-        //Funcao para detectar movimento do mouse
-        if(interagir.clicou){
-            if (pecaSelecionada == null){
-                // se pecaSelecionada e null, checha se voce pode escolher uma peca
-                for(Peça peça: copiaPecas){
-                    //se o mouse esta em cima de uma peca aliada, entao escolhe a peca ativada
-                    if(peça.cor == corAtual && peça.coluna == interagir.x/Tabuleiro.tamanho && peça.linha == interagir.y/Tabuleiro.tamanho){
-                        pecaSelecionada = peça;
+        if (promocaoPendente) {
+            // Exibe o JOptionPane para escolher a peça de promoção
+            String[] opcoes = {"Rainha", "Torre", "Bispo", "Cavalo"};
+            int escolha = JOptionPane.showOptionDialog(
+                    this, // Componente pai (a tela do jogo)
+                    "Escolha a peça para promoção:", // Mensagem
+                    "Promoção de Peão", // Título da janela
+                    JOptionPane.DEFAULT_OPTION, // Tipo de opção
+                    JOptionPane.QUESTION_MESSAGE, // Ícone da janela
+                    null, // Ícone personalizado (null para padrão)
+                    opcoes, // Opções
+                    opcoes[0] // Opção padrão selecionada
+            );
+
+            // Verifica a escolha do jogador
+            if (escolha >= 0) { // Se o jogador escolheu uma opção
+                Peça novaPeça = null;
+                switch (escolha) {
+                    case 0: // Rainha
+                        novaPeça = new Rainha(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
                         break;
+                    case 1: // Torre
+                        novaPeça = new Torre(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
+                        break;
+                    case 2: // Bispo
+                        novaPeça = new Bispo(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
+                        break;
+                    case 3: // Cavalo
+                        novaPeça = new Cavalo(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
+                        break;
+                }
+
+                if (novaPeça != null) {
+                    // Remove o peão promovido
+                    pecas.remove(pecaSelecionada);
+                    copiaPecas.remove(pecaSelecionada);
+
+                    // Adiciona a nova peça
+                    pecas.add(novaPeça);
+                    copiaPecas.add(novaPeça);
+                }
+
+                // Finaliza a promoção e muda o jogador
+                promocaoPendente = false;
+                mudarJogador();
+            }
+        } else {
+            // Lógica normal do jogo
+            if (interagir.clicou) {
+                if (pecaSelecionada == null) {
+                    for (Peça peça : copiaPecas) {
+                        if (peça.cor == corAtual && peça.coluna == interagir.x / Tabuleiro.tamanho && peça.linha == interagir.y / Tabuleiro.tamanho) {
+                            pecaSelecionada = peça;
+                            break;
+                        }
+                    }
+                } else {
+                    simular();
+                }
+            }
+
+            if (!interagir.clicou) {
+                if (pecaSelecionada != null) {
+                    if (isQuadrante) {
+                        copiarPecas(copiaPecas, pecas);
+                        pecaSelecionada.atualizarPosicao();
+                        if (roque != null) {
+                            roque.atualizarPosicao();
+                        }
+
+                        if (promover()) {
+                            promocaoPendente = true;
+                        } else {
+                            mudarJogador();
+                        }
+                    } else {
+                        copiarPecas(pecas, copiaPecas);
+                        pecaSelecionada.resetarPosicao();
+                        pecaSelecionada = null;
                     }
                 }
             }
-            else{
-
-                // se o jogador esta segurando a peca, entao ele simula o movimento
-                simular();
-            }
         }
+    }
+    private void promovendo() {
+        if (interagir.clicou) {
+            for (Peça peça : pecasPromovidas) {
+                if (peça.coluna == interagir.x / Tabuleiro.tamanho && peça.linha == interagir.y / Tabuleiro.tamanho) {
+                    // Remove o peão promovido
+                    pecas.remove(pecaSelecionada);
+                    copiaPecas.remove(pecaSelecionada);
 
-        if(interagir.clicou == false){
-            if(pecaSelecionada != null){
-                if(isQuadrante){
-                    //atualiza a peca caso dela ter sido capturada e removida durante a simulacao
-                    copiarPecas(copiaPecas,pecas);
-                    pecaSelecionada.atualizarPosicao();
-                    if(roque != null){
-                        roque.atualizarPosicao();
+                    // Adiciona a nova peça escolhida
+                    Peça novaPeça = null;
+                    switch (peça.tipo) {
+                        case TORRE:
+                            novaPeça = new Torre(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
+                            break;
+                        case CAVALO:
+                            novaPeça = new Cavalo(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
+                            break;
+                        case BISPO:
+                            novaPeça = new Bispo(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
+                            break;
+                        case RAINHA:
+                            novaPeça = new Rainha(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
+                            break;
                     }
 
+                    if (novaPeça != null) {
+                        pecas.add(novaPeça);
+                        copiaPecas.add(novaPeça);
+                    }
+
+                    podePromover = false;
+                    pecasPromovidas.clear();
                     mudarJogador();
-                }else {
-                    copiarPecas(pecas, copiaPecas);
-                    pecaSelecionada.resetarPosicao();
-                    pecaSelecionada = null;
+                    break;
                 }
             }
         }
@@ -235,18 +323,18 @@ private void roque(){
 
     }
 
-    private void mudarJogador(){
-        if(corAtual == branco){
+    private void mudarJogador() {
+        if (corAtual == branco) {
             corAtual = preto;
-            for(Peça peça: pecas){
-                if(peça.cor == preto){
+            for (Peça peça : pecas) {
+                if (peça.cor == preto) {
                     peça.pecaMoveuDoisPassos = false;
                 }
             }
-        }else{
+        } else {
             corAtual = branco;
-            for(Peça peça: pecas){
-                if(peça.cor == branco){
+            for (Peça peça : pecas) {
+                if (peça.cor == branco) {
                     peça.pecaMoveuDoisPassos = false;
                 }
             }

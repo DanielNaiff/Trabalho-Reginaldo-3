@@ -2,7 +2,7 @@ package principal;
 
 public enum TipoPeca {
     REI,
-    Rainha,
+    RAINHA,
     TORRE,
     CAVALO,
     BISPO,
