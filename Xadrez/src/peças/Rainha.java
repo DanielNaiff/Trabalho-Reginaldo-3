@@ -13,6 +13,7 @@ public class Rainha extends Peça{
         }
     }
 
+    @Override
     public boolean podeMovimentar(int colunaAlvo, int linhaAlvo){
         if(isNaLinha(colunaAlvo, linhaAlvo) && !mesmoQuadrante(colunaAlvo, linhaAlvo)){
             if(Math.abs(colunaAlvo - preColuna) == Math.abs(linhaAlvo - preLinha)){

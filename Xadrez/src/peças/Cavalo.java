@@ -13,6 +13,7 @@ public class Cavalo extends Peça{
         }
     }
 
+    @Override
     public boolean podeMovimentar(int colunaAlvo, int linhaAlvo){
         if(isNaLinha(colunaAlvo, linhaAlvo)){
             if(Math.abs(colunaAlvo - preColuna) * Math.abs(linhaAlvo - preLinha) == 2 ){

@@ -15,6 +15,7 @@ public class Tela extends JPanel implements Runnable {
     static Thread threadJogo;
     private boolean executando;
     Peça pecaSelecionada;
+    public static Peça roque;
     private long ultimaAtualizacao;
     private final int FPS = 60; // Frames por segundo desejados
     private final double intervalo = 1000000000.0 / FPS; // Intervalo entre frames em nanosegundos
@@ -77,12 +78,31 @@ public class Tela extends JPanel implements Runnable {
 
     }
 
+private void roque(){
+        if(roque != null){
+            if(roque.coluna == 0){
+                roque.coluna += 3;
+            }else if(roque.coluna == 7){
+                roque.coluna -= 2;
+            }
+            roque.x = roque.getX(roque.coluna);
+        }
+
+}
+
     //se uma peca esta sendo segurada, mantem a posicao
     private void simular(){
+
 
         //Resetar a lista de pecas
         copiarPecas(pecas, copiaPecas);
 
+        //resetar a peca do roque
+        if(roque != null){
+            roque.coluna = roque.preColuna;
+            roque.x = roque.getX(roque.coluna);
+            roque = null;
+        }
         pecaSelecionada.x = interagir.x - Tabuleiro.tamanho/2;
         pecaSelecionada.y = interagir.y - Tabuleiro.tamanho/2;
 
@@ -98,6 +118,7 @@ public class Tela extends JPanel implements Runnable {
             if(pecaSelecionada.peçaColidida != null){
                 copiaPecas.remove(pecaSelecionada.peçaColidida.getIndex());
             }
+            roque();
             isMover = true;
         }
     }
@@ -128,6 +149,9 @@ public class Tela extends JPanel implements Runnable {
                     //atualiza a peca caso dela ter sido capturada e removida durante a simulacao
                     copiarPecas(copiaPecas,pecas);
                     pecaSelecionada.atualizarPosicao();
+                    if(roque != null){
+                        roque.atualizarPosicao();
+                    }
 
                     mudarJogador();
                 }else {
@@ -207,11 +231,11 @@ public class Tela extends JPanel implements Runnable {
         pecas.add(new Peao(branco, 7, 6));
         pecas.add(new Torre(branco, 0, 7));
         pecas.add(new Torre(branco, 7, 7));
-        pecas.add(new Cavalo(branco, 1, 7));
-        pecas.add(new Cavalo(branco, 6, 7));
-        pecas.add(new Bispo(branco, 2, 7));
-        pecas.add(new Bispo(branco, 5, 7));
-        pecas.add(new Rainha(branco, 3, 7));
+//        pecas.add(new Cavalo(branco, 1, 7));
+//        pecas.add(new Cavalo(branco, 6, 7));
+//        pecas.add(new Bispo(branco, 2, 7));
+//        pecas.add(new Bispo(branco, 5, 7));
+//        pecas.add(new Rainha(branco, 3, 7));
         pecas.add(new Rei(branco, 4, 7));
 
 

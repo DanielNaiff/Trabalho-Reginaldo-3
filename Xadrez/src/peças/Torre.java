@@ -13,6 +13,7 @@ public class Torre extends Peça{
         }
     }
 
+    @Override
     public boolean podeMovimentar(int colunaAlvo, int linhaAlvo){
         if(isNaLinha(colunaAlvo, linhaAlvo) && !mesmoQuadrante(colunaAlvo, linhaAlvo)){
             if(colunaAlvo == preColuna || linhaAlvo == preLinha){

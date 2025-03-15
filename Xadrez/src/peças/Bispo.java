@@ -12,6 +12,8 @@ public class Bispo extends Peça{
             png = getPng("/peça/bispo-black");
         }
     }
+
+    @Override
     public boolean podeMovimentar(int colunaAlvo, int linhaAlvo){
         if(isNaLinha(colunaAlvo, linhaAlvo) && !mesmoQuadrante(colunaAlvo, linhaAlvo)){
             if(Math.abs(colunaAlvo - preColuna) == Math.abs(linhaAlvo - preLinha)){
