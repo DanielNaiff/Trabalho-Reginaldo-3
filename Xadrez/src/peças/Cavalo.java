@@ -1,10 +1,13 @@
 package peças;
 
 import principal.Tela;
+import principal.TipoPeca;
 
 public class Cavalo extends Peça{
     public Cavalo(int cor, int coluna, int linha) {
         super(cor, coluna, linha);
+
+        tipo = TipoPeca.CAVALO;
 
         if(cor == Tela.branco){
             png = getPng("/peça/cavalo-white");

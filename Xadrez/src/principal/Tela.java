@@ -244,8 +244,18 @@ private void roque(){
     private void mudarJogador(){
         if(corAtual == branco){
             corAtual = preto;
+            for(Peça peça: pecas){
+                if(peça.cor == preto){
+                    peça.pecaMoveuDoisPassos = false;
+                }
+            }
         }else{
             corAtual = branco;
+            for(Peça peça: pecas){
+                if(peça.cor == branco){
+                    peça.pecaMoveuDoisPassos = false;
+                }
+            }
         }
 
         pecaSelecionada = null;

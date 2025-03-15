@@ -2,6 +2,7 @@ package peças;
 
 import principal.Tabuleiro;
 import principal.Tela;
+import principal.TipoPeca;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,9 +14,11 @@ public class Peça {
     public boolean moveu;
     public BufferedImage png;
     public int x, y;
+    public TipoPeca tipo;
     public int coluna, linha, preColuna, preLinha;
     public int cor;
     public Peça peçaColidida;
+    public boolean pecaMoveuDoisPassos;
 
     public Peça(int cor, int coluna, int linha){
         this.cor = cor;
@@ -186,6 +189,13 @@ public class Peça {
     }
 
     public void atualizarPosicao(){
+
+        if(tipo == TipoPeca.PEAO){
+            if(Math.abs(linha - preLinha) == 2){
+                pecaMoveuDoisPassos = true;
+            }
+        }
+
         moveu = true;
         x = getX(coluna);
         y = getY(linha);

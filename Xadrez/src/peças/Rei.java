@@ -1,10 +1,13 @@
 package peças;
 
 import principal.Tela;
+import principal.TipoPeca;
 
 public class Rei extends Peça{
     public Rei(int cor, int coluna, int linha) {
         super(cor, coluna, linha);
+
+        tipo = TipoPeca.REI;
         if(cor == Tela.branco){
             png = getPng("/peça/rei-white");
         }else{

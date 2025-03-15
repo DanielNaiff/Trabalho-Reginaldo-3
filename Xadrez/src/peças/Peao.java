@@ -1,10 +1,13 @@
 package peças;
 
 import principal.Tela;
+import principal.TipoPeca;
 
 public class Peao extends Peça{
     public Peao(int cor, int coluna, int linha) {
         super(cor, coluna, linha);
+
+        tipo = TipoPeca.PEAO;
 
         if(cor == Tela.branco){
             png = getPng("/peça/peao-white");
@@ -12,6 +15,8 @@ public class Peao extends Peça{
             png = getPng("/peça/peao-black");
         }
     }
+
+
 
     @Override
     public boolean podeMovimentar(int colunaAlvo, int linhaAlvo){
@@ -36,6 +41,15 @@ public class Peao extends Peça{
             //captura de movimento
             if(Math.abs(colunaAlvo - preColuna) == 1 && linhaAlvo == preLinha + valor && peçaColidida != null && peçaColidida.cor != cor){
                 return true;
+            }
+
+            if(Math.abs(colunaAlvo - preColuna) == 1 && linhaAlvo == preLinha + valor){
+                for(Peça peça : Tela.copiaPecas){
+                    if(peça.coluna == colunaAlvo && peça.linha == preLinha && peça.pecaMoveuDoisPassos == true){
+                        peçaColidida = peça;
+                        return true;
+                    }
+                }
             }
         }
         return false;

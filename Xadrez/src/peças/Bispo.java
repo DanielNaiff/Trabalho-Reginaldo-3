@@ -1,10 +1,13 @@
 package peças;
 
 import principal.Tela;
+import principal.TipoPeca;
 
 public class Bispo extends Peça{
     public Bispo(int cor, int coluna, int linha) {
         super(cor, coluna, linha);
+
+       tipo = TipoPeca.BISPO;
 
         if(cor == Tela.branco){
             png = getPng("/peça/bispo-white");
