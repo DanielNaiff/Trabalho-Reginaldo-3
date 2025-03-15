@@ -12,4 +12,5 @@ public class Bispo extends Peça{
             png = getPng("/peça/bispo-black");
         }
     }
+
 }

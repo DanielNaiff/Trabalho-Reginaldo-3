@@ -28,6 +28,56 @@ public class Peça {
 
     public Peça(){}
 
+    public boolean mesmoQuadrante(int colunaAlvo, int linhaAlvo){
+        if(colunaAlvo == preColuna && linhaAlvo == preLinha){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean estaEmLinhaReta(int colunaALvo, int linhaAlvo){
+        //esquerda
+        for(int c = preColuna - 1; c> colunaALvo; c--){
+            for (Peça peça : Tela.copiaPecas){
+                if(peça.coluna == c && peça.linha == linhaAlvo){
+                    peçaColidida = peça;
+                    return true;
+                }
+            }
+        }
+
+        //direita
+
+        for(int c = preColuna + 1; c < colunaALvo; c++){
+            for (Peça peça : Tela.copiaPecas){
+                if(peça.coluna == c && peça.linha == linhaAlvo){
+                    peçaColidida = peça;
+                    return true;
+                }
+            }
+        }
+
+        for(int r = preLinha - 1; r > linhaAlvo; r--){
+            for (Peça peça : Tela.copiaPecas){
+                if(peça.coluna == colunaALvo && peça.linha == r){
+                    peçaColidida = peça;
+                    return true;
+                }
+            }
+        }
+
+        for(int r = preLinha + 1; r < linhaAlvo; r++){
+            for (Peça peça : Tela.copiaPecas){
+                if(peça.coluna == colunaALvo && peça.linha == r){
+                    peçaColidida = peça;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public BufferedImage getPng(String imagePath){
         BufferedImage png = null;
 

@@ -12,4 +12,15 @@ public class Torre extends Peça{
             png = getPng("/peça/torre-black");
         }
     }
+
+    public boolean movimento(int colunaAlvo, int linhaAlvo){
+        if(isNaLinha(colunaAlvo, linhaAlvo) && !mesmoQuadrante(colunaAlvo, linhaAlvo)){
+            if(colunaAlvo == preColuna || linhaAlvo == preLinha){
+                if(estaNoQuadranteValido(colunaAlvo, linhaAlvo) && !estaEmLinhaReta(colunaAlvo, linhaAlvo)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

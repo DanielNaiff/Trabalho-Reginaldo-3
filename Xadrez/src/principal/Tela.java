@@ -203,14 +203,14 @@ public class Tela extends JPanel implements Runnable {
         pecas.add(new Peao(branco, 5, 6));
         pecas.add(new Peao(branco, 6, 6));
         pecas.add(new Peao(branco, 7, 6));
-        pecas.add(new Torre(branco, 0, 7));
+        pecas.add(new Torre(branco, 0, 3));
         pecas.add(new Torre(branco, 7, 7));
         pecas.add(new Cavalo(branco, 1, 7));
         pecas.add(new Cavalo(branco, 6, 7));
         pecas.add(new Bispo(branco, 2, 7));
         pecas.add(new Bispo(branco, 5, 7));
         pecas.add(new Rainha(branco, 3, 7));
-        pecas.add(new Rei(branco, 4, 4));
+        pecas.add(new Rei(branco, 4, 7));
 
 
     }
