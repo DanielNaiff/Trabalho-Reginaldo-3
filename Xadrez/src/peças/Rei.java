@@ -12,7 +12,7 @@ public class Rei extends Peça{
         }
     }
 
-    public boolean movimento(int colunaAlvo, int linhaAlvo){
+    public boolean podeMovimentar(int colunaAlvo, int linhaAlvo){
         if(isNaLinha(colunaAlvo, linhaAlvo)){
             if(Math.abs(colunaAlvo - preColuna) + Math.abs(linhaAlvo - preLinha) == 1 || Math.abs(colunaAlvo - preColuna)*Math.abs(linhaAlvo - preLinha) == 1){
 

@@ -35,6 +35,61 @@ public class Peça {
         return false;
     }
 
+    public boolean estaNaDiagonal(int colunaAlvo, int linhaALvo){
+
+
+        if(linhaALvo < preLinha){
+            //esquerda
+            for(int c = preColuna - 1; c > colunaAlvo; c-- ){
+                int diferenca = Math.abs(c - preColuna);
+                for (Peça peça : Tela.copiaPecas){
+                    if(peça.coluna == c && peça.linha == preLinha - diferenca){
+                        peçaColidida = peça;
+                        return true;
+                    }
+                }
+            }
+
+            //direita
+            for(int c = preColuna + 1; c < colunaAlvo; c++ ){
+                int diferenca = Math.abs(c - preColuna);
+                for (Peça peça : Tela.copiaPecas){
+                    if(peça.coluna == c && peça.linha == preLinha - diferenca){
+                        peçaColidida = peça;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        if(linhaALvo > preLinha) {
+            // para baixo na esquerda
+            for (int c = preColuna - 1; c > colunaAlvo; c--) {
+                int diferenca = Math.abs(c - preColuna);
+                for (Peça peça : Tela.copiaPecas) {
+                    if (peça.coluna == c && peça.linha == preLinha - diferenca) {
+                        peçaColidida = peça;
+                        return true;
+                    }
+                }
+            }
+
+            // para cima na esquerda
+            for (int c = preColuna + 1; c < colunaAlvo; c++) {
+                int diferenca = Math.abs(c - preColuna);
+                for (Peça peça : Tela.copiaPecas) {
+                    if (peça.coluna == c && peça.linha == preLinha - diferenca) {
+                        peçaColidida = peça;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+
+    }
+
     public boolean estaEmLinhaReta(int colunaALvo, int linhaAlvo){
         //esquerda
         for(int c = preColuna - 1; c> colunaALvo; c--){
@@ -139,7 +194,7 @@ public class Peça {
 
     }
 
-    public boolean movimento(int colunaAlvo, int linhaAlvo){
+    public boolean podeMovimentar(int colunaAlvo, int linhaAlvo){
         return false;
     }
 
