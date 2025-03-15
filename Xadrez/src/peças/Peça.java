@@ -10,6 +10,7 @@ import java.io.IOException;
 
 public class Peça {
 
+    public boolean moveu;
     public BufferedImage png;
     public int x, y;
     public int coluna, linha, preColuna, preLinha;
@@ -36,8 +37,6 @@ public class Peça {
     }
 
     public boolean estaNaDiagonal(int colunaAlvo, int linhaALvo){
-
-
         if(linhaALvo < preLinha){
             //esquerda
             for(int c = preColuna - 1; c > colunaAlvo; c-- ){
@@ -187,6 +186,7 @@ public class Peça {
     }
 
     public void atualizarPosicao(){
+        moveu = true;
         x = getX(coluna);
         y = getY(linha);
         preColuna = getColuna(x);
@@ -227,4 +227,6 @@ public class Peça {
     public void desenhar(Graphics2D graphics2D){
         graphics2D.drawImage(png, x, y, Tabuleiro.tamanho, Tabuleiro.tamanho, null);
     }
+
+
 }
