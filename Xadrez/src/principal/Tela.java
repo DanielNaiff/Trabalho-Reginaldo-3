@@ -128,6 +128,8 @@ public class Tela extends JPanel implements Runnable {
                     //atualiza a peca caso dela ter sido capturada e removida durante a simulacao
                     copiarPecas(copiaPecas,pecas);
                     pecaSelecionada.atualizarPosicao();
+
+                    mudarJogador();
                 }else {
                     copiarPecas(pecas, copiaPecas);
                     pecaSelecionada.resetarPosicao();
@@ -213,6 +215,16 @@ public class Tela extends JPanel implements Runnable {
         pecas.add(new Rei(branco, 4, 7));
 
 
+    }
+
+    private void mudarJogador(){
+        if(corAtual == branco){
+            corAtual = preto;
+        }else{
+            corAtual = branco;
+        }
+
+        pecaSelecionada = null;
     }
 
     private void copiarPecas(ArrayList<Peça> atuais, ArrayList<Peça> copias){
