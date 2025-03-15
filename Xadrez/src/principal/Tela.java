@@ -120,14 +120,28 @@ private void roque(){
         isQuadrante = false;
 
         if (pecaSelecionada.podeMovimentar(pecaSelecionada.coluna, pecaSelecionada.linha)) {
-            isQuadrante = true;
+            // Verifica se o rei está em xeque
+            if (reiEmXeque(corAtual)) {
+                // Se o rei está em xeque, o movimento só é permitido se resolver o xeque
+                if (movimentoResolveXeque(pecaSelecionada, pecaSelecionada.coluna, pecaSelecionada.linha)) {
+                    isQuadrante = true;
+                } else {
+                    // Movimento não resolve o xeque, bloqueia
+                    isQuadrante = false;
+                    isMover = false;
+                    return;
+                }
+            } else {
+                // Se o rei não está em xeque, o movimento é permitido
+                isQuadrante = true;
+            }
 
             if (pecaSelecionada.peçaColidida != null) {
                 copiaPecas.remove(pecaSelecionada.peçaColidida.getIndex());
             }
             roque();
 
-            // Verifica se o movimento é ilegal (rei em xeque)
+            // Verifica se o movimento é ilegal (rei em xeque após o movimento)
             if (eIlegal(pecaSelecionada)) {
                 // Define a posição ilegal
                 colunaIlegal = pecaSelecionada.coluna;
@@ -277,6 +291,41 @@ private void roque(){
                 }
             }
         }
+    }
+
+    private boolean movimentoResolveXeque(Peça peca, int novaColuna, int novaLinha) {
+        // Simula o movimento
+        int colunaOriginal = peca.coluna;
+        int linhaOriginal = peca.linha;
+        Peça pecaCapturada = null;
+
+        // Verifica se há uma peça na nova posição
+        for (Peça p : copiaPecas) {
+            if (p.coluna == novaColuna && p.linha == novaLinha) {
+                pecaCapturada = p;
+                break;
+            }
+        }
+
+        // Move a peça
+        peca.coluna = novaColuna;
+        peca.linha = novaLinha;
+        if (pecaCapturada != null) {
+            copiaPecas.remove(pecaCapturada);
+        }
+
+        // Verifica se o rei ainda está em xeque após o movimento
+        boolean reiAindaEmXeque = reiEmXeque(corAtual);
+
+        // Reverte o movimento
+        peca.coluna = colunaOriginal;
+        peca.linha = linhaOriginal;
+        if (pecaCapturada != null) {
+            copiaPecas.add(pecaCapturada);
+        }
+
+        // Retorna true se o movimento resolver o xeque
+        return !reiAindaEmXeque;
     }
 
     public void carregarJogo() {
