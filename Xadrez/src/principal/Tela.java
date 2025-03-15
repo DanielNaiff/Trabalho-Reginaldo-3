@@ -11,6 +11,7 @@ public class Tela extends JPanel implements Runnable {
     boolean isMover;
     boolean isQuadrante;
 
+
     Interagir interagir = new Interagir();
     static Thread threadJogo;
     private boolean executando;
@@ -27,6 +28,7 @@ public class Tela extends JPanel implements Runnable {
 
     public static ArrayList<Peça> pecas = new ArrayList<>();
     public static ArrayList<Peça> copiaPecas = new ArrayList<>();
+    ArrayList<Peça> pecasPromovidas = new ArrayList<>();
 
 
 
@@ -54,28 +56,20 @@ public class Tela extends JPanel implements Runnable {
             p.desenhar(graphics2D);
         }
 
-        // Verifica se existe uma peça selecionada
-        if(pecaSelecionada != null) {
-            if(isMover){
-                // Define a cor de desenho para branco (geralmente, isso seria para desenhar um contorno ou um destaque)
-                graphics2D.setColor(Color.pink);
+    }
 
-                // Define o nível de transparência para 0, ou seja, 100% de transparência (totalmente invisível)
-                // Isso provavelmente é feito para apagar qualquer forma anterior da peça antes de desenhá-la na nova posição
-                graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.f));
-
-                // Desenha um retângulo na posição da peça selecionada
-                // O retângulo é desenhado nas coordenadas relativas ao tabuleiro, com o tamanho definido pela constante 'Tabuleiro.tamanho'
-                // Isso apagaria qualquer forma anterior que tivesse sido desenhada na posição da peça
-                graphics2D.fillRect(pecaSelecionada.coluna * Tabuleiro.tamanho, pecaSelecionada.linha * Tabuleiro.tamanho, Tabuleiro.tamanho, Tabuleiro.tamanho);
-
-                // Restaura a transparência para 100% (opacidade total), garantindo que os próximos desenhos não sejam transparentes
-                graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+    private boolean promover(){
+        if(pecaSelecionada.tipo == TipoPeca.PEAO){
+            if(corAtual == branco && pecaSelecionada.linha == 0 || corAtual == preto && pecaSelecionada.linha == 7){
+                pecasPromovidas.clear();
+                pecasPromovidas.add(new Torre(corAtual, 9, 2));
+                pecasPromovidas.add(new Cavalo(corAtual, 9 ,3));
+                pecasPromovidas.add(new Bispo(corAtual, 9, 4));
+                pecasPromovidas.add(new Rainha(corAtual, 9 ,5));
+                return true;
             }
-            //Desenha a peca selecionada
-            pecaSelecionada.desenhar(graphics2D);
         }
-
+        return false;
     }
 
 private void roque(){
@@ -231,11 +225,11 @@ private void roque(){
         pecas.add(new Peao(branco, 7, 6));
         pecas.add(new Torre(branco, 0, 7));
         pecas.add(new Torre(branco, 7, 7));
-//        pecas.add(new Cavalo(branco, 1, 7));
-//        pecas.add(new Cavalo(branco, 6, 7));
-//        pecas.add(new Bispo(branco, 2, 7));
-//        pecas.add(new Bispo(branco, 5, 7));
-//        pecas.add(new Rainha(branco, 3, 7));
+        pecas.add(new Cavalo(branco, 1, 7));
+        pecas.add(new Cavalo(branco, 6, 7));
+        pecas.add(new Bispo(branco, 2, 7));
+        pecas.add(new Bispo(branco, 5, 7));
+        pecas.add(new Rainha(branco, 3, 7));
         pecas.add(new Rei(branco, 4, 7));
 
 
