@@ -12,4 +12,23 @@ public class Rainha extends Peça{
             png = getPng("/peça/rainha-black");
         }
     }
+
+    public boolean podeMovimentar(int colunaAlvo, int linhaAlvo){
+        if(isNaLinha(colunaAlvo, linhaAlvo) && !mesmoQuadrante(colunaAlvo, linhaAlvo)){
+            if(Math.abs(colunaAlvo - preColuna) == Math.abs(linhaAlvo - preLinha)){
+                if(estaNoQuadranteValido(colunaAlvo, linhaAlvo) && !estaNaDiagonal(colunaAlvo, linhaAlvo) ){
+                    return true;
+                }
+            }
+        }
+
+        if(isNaLinha(colunaAlvo, linhaAlvo) && !mesmoQuadrante(colunaAlvo, linhaAlvo)){
+            if(colunaAlvo == preColuna || linhaAlvo == preLinha){
+                if(estaNoQuadranteValido(colunaAlvo, linhaAlvo) && !estaEmLinhaReta(colunaAlvo, linhaAlvo)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
