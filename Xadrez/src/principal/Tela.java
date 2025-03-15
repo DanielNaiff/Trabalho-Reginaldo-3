@@ -77,7 +77,7 @@ public class Tela extends JPanel implements Runnable {
 
     private boolean promover() {
         if (pecaSelecionada != null && pecaSelecionada.tipo == TipoPeca.PEAO) {
-            if (corAtual == branco && pecaSelecionada.linha == 0 || corAtual == preto && pecaSelecionada.linha == 7) {
+            if ((corAtual == branco && pecaSelecionada.linha == 0) || (corAtual == preto && pecaSelecionada.linha == 7)) {
                 promocaoPendente = true; // Define que há uma promoção pendente
                 return true;
             }
@@ -173,10 +173,13 @@ private void roque(){
 
     private void atualizar() {
         if (promocaoPendente) {
-            // Lógica de promoção
+            // Se há uma promoção pendente, chama o método para lidar com a promoção
+            promovendo();
         } else {
+            // Lógica normal do jogo
             if (interagir.clicou) {
                 if (pecaSelecionada == null) {
+                    // Seleciona a peça
                     for (Peça peça : copiaPecas) {
                         if (peça.cor == corAtual && peça.coluna == interagir.x / Tabuleiro.tamanho && peça.linha == interagir.y / Tabuleiro.tamanho) {
                             pecaSelecionada = peça;
@@ -184,6 +187,7 @@ private void roque(){
                         }
                     }
                 } else {
+                    // Simula o movimento da peça selecionada
                     simular();
                 }
             }
@@ -191,6 +195,7 @@ private void roque(){
             if (!interagir.clicou) {
                 if (pecaSelecionada != null) {
                     if (isQuadrante) {
+                        // Confirma o movimento
                         copiarPecas(copiaPecas, pecas);
                         pecaSelecionada.atualizarPosicao();
                         if (roque != null) {
@@ -200,24 +205,43 @@ private void roque(){
                         // Verifica se o rei adversário está em xeque após o movimento
                         int corAdversario = (corAtual == branco) ? preto : branco;
                         if (reiEmXeque(corAdversario)) {
-                            JOptionPane.showMessageDialog(
-                                    this, // Componente pai (a tela do jogo)
-                                    "Xeque! O rei adversário está em perigo.", // Mensagem
-                                    "Xeque", // Título da janela
-                                    JOptionPane.WARNING_MESSAGE // Tipo de mensagem
-                            );
+                            // Verifica se é xeque-mate
+                            if (isXequeMate(corAdversario)) {
+                                // Exibe mensagem de vitória
+                                String vencedor = (corAtual == branco) ? "Branco" : "Preto";
+                                JOptionPane.showMessageDialog(
+                                        this, // Componente pai (a tela do jogo)
+                                        "Xeque-mate! O jogador " + vencedor + " venceu!", // Mensagem
+                                        "Fim de Jogo", // Título da janela
+                                        JOptionPane.INFORMATION_MESSAGE // Tipo de mensagem
+                                );
+
+                                // Encerra o jogo
+                                pararJogo();
+                                return;
+                            } else {
+                                // Apenas xeque
+                                JOptionPane.showMessageDialog(
+                                        this, // Componente pai (a tela do jogo)
+                                        "Xeque! O rei adversário está em perigo.", // Mensagem
+                                        "Xeque", // Título da janela
+                                        JOptionPane.WARNING_MESSAGE // Tipo de mensagem
+                                );
+                            }
                         }
 
+                        // Verifica se o movimento resultou em uma promoção
                         if (promover()) {
-                            promocaoPendente = true;
+                            promocaoPendente = true; // Ativa o estado de promoção pendente
                         } else {
-                            mudarJogador();
+                            mudarJogador(); // Passa a vez para o próximo jogador
                         }
 
                         // Reseta a posição ilegal após o movimento ser confirmado
                         colunaIlegal = -1;
                         linhaIlegal = -1;
                     } else {
+                        // Cancela o movimento
                         copiarPecas(pecas, copiaPecas);
                         pecaSelecionada.resetarPosicao();
                         pecaSelecionada = null;
@@ -229,6 +253,32 @@ private void roque(){
                 }
             }
         }
+    }
+    private boolean isXequeMate(int cor) {
+        // Verifica se o rei está em xeque
+        if (!reiEmXeque(cor)) {
+            return false; // Não está em xeque, logo não pode ser xeque-mate
+        }
+
+        // Verifica se há algum movimento legal que tire o rei do xeque
+        for (Peça peça : new ArrayList<>(copiaPecas)) { // Usar uma cópia para evitar ConcurrentModificationException
+            if (peça.cor == cor) {
+                // Obtém todos os movimentos possíveis para a peça
+                for (int linha = 0; linha < 8; linha++) {
+                    for (int coluna = 0; coluna < 8; coluna++) {
+                        if (peça.podeMovimentar(coluna, linha)) {
+                            // Simula o movimento
+                            if (movimentoResolveXeque(peça, coluna, linha)) {
+                                return false; // Há pelo menos um movimento que resolve o xeque
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Se nenhum movimento resolver o xeque, é xeque-mate
+        return true;
     }
     private boolean reiEmXeque(int cor) {
         // Encontra o rei da cor especificada
@@ -255,42 +305,53 @@ private void roque(){
     }
 
     private void promovendo() {
-        if (interagir.clicou) {
-            for (Peça peça : pecasPromovidas) {
-                if (peça.coluna == interagir.x / Tabuleiro.tamanho && peça.linha == interagir.y / Tabuleiro.tamanho) {
-                    // Remove o peão promovido
-                    pecas.remove(pecaSelecionada);
-                    copiaPecas.remove(pecaSelecionada);
+        // Exibe as opções de promoção
+        Object[] opcoes = {"Rainha", "Torre", "Bispo", "Cavalo"};
+        int escolha = JOptionPane.showOptionDialog(
+                this, // Componente pai (a tela do jogo)
+                "Escolha a peça para promoção:", // Mensagem
+                "Promoção de Peão", // Título da janela
+                JOptionPane.DEFAULT_OPTION, // Tipo de opção
+                JOptionPane.QUESTION_MESSAGE, // Tipo de mensagem
+                null, // Ícone (não usado)
+                opcoes, // Opções
+                opcoes[0] // Opção padrão
+        );
 
-                    // Adiciona a nova peça escolhida
-                    Peça novaPeça = null;
-                    switch (peça.tipo) {
-                        case TORRE:
-                            novaPeça = new Torre(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
-                            break;
-                        case CAVALO:
-                            novaPeça = new Cavalo(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
-                            break;
-                        case BISPO:
-                            novaPeça = new Bispo(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
-                            break;
-                        case RAINHA:
-                            novaPeça = new Rainha(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
-                            break;
-                    }
+        // Remove o peão promovido
+        pecas.remove(pecaSelecionada);
+        copiaPecas.remove(pecaSelecionada);
 
-                    if (novaPeça != null) {
-                        pecas.add(novaPeça);
-                        copiaPecas.add(novaPeça);
-                    }
-
-                    podePromover = false;
-                    pecasPromovidas.clear();
-                    mudarJogador();
-                    break;
-                }
-            }
+        // Adiciona a nova peça escolhida
+        Peça novaPeça = null;
+        switch (escolha) {
+            case 0:
+                novaPeça = new Rainha(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
+                break;
+            case 1:
+                novaPeça = new Torre(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
+                break;
+            case 2:
+                novaPeça = new Bispo(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
+                break;
+            case 3:
+                novaPeça = new Cavalo(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
+                break;
+            default:
+                // Se o jogador fechar a janela sem escolher, promove para rainha por padrão
+                novaPeça = new Rainha(corAtual, pecaSelecionada.coluna, pecaSelecionada.linha);
+                break;
         }
+
+        if (novaPeça != null) {
+            pecas.add(novaPeça);
+            copiaPecas.add(novaPeça);
+        }
+
+        // Reseta o estado de promoção
+        promocaoPendente = false;
+        pecaSelecionada = null;
+        mudarJogador(); // Passa a vez para o próximo jogador
     }
 
     private boolean movimentoResolveXeque(Peça peca, int novaColuna, int novaLinha) {
@@ -363,7 +424,6 @@ private void roque(){
             }
         }
     }
-
     public void pararJogo() {
         executando = false;
     }
