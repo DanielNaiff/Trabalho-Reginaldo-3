@@ -14,7 +14,7 @@ public class Peça {
     public int coluna, linha, preColuna, preLinha;
     public int cor;
 
-    public Peça(int corr, int coluna, int linha){
+    public Peça(int cor, int coluna, int linha){
         this.cor = cor;
         this.coluna = coluna;
         this.linha = linha;
@@ -23,6 +23,8 @@ public class Peça {
         preColuna = coluna;
         preLinha = linha;
     }
+
+    public Peça(){}
 
     public BufferedImage getPng(String imagePath){
         BufferedImage png = null;
@@ -37,12 +39,28 @@ public class Peça {
         return png;
     }
 
+    public void atualizarPosicao(){
+        x = getX(coluna);
+        y = getY(linha);
+        preColuna = getColuna(x);
+        preLinha = getLinha(y);
+
+    }
+
     public int getX(int col){
         return coluna * Tabuleiro.tamanho;
     }
 
     public int getY(int linha){
         return linha * Tabuleiro.tamanho;
+    }
+
+    public int getColuna(int x){
+        return (x + (Tabuleiro.tamanho/2))/Tabuleiro.tamanho;
+    }
+
+    public int getLinha(int y){
+        return( y + (Tabuleiro.tamanho/2))/Tabuleiro.tamanho;
     }
 
     public void desenhar(Graphics2D graphics2D){
