@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0aac66c5-21f5-4f1f-b362-50dfeb102b5a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/peças/Bispo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Bispo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/peças/Cavalo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Cavalo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/peças/Peao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Peao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/peças/Peça.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Peça.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/peças/Rainha.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Rainha.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/peças/Rei.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Rei.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/peças/Torre.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Torre.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/principal/Tela.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/principal/Tela.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Enum" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2uC5oTipv1hWka0eoCdVMTOk8yo" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Principal.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Tela.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DANIEL/Documents/GitHub/Trabalho-Reginaldo-3/Xadrez/images/peça&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DANIEL\Documents\GitHub\Trabalho-Reginaldo-3\Xadrez\images\peça" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Principal" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="principal.Principal" />
+      <module name="Xadrez" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="principal.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Principal" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0aac66c5-21f5-4f1f-b362-50dfeb102b5a" name="Changes" comment="" />
+      <created>1741739893552</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1741739893552</updated>
+    </task>
+    <servers />
+  </component>
+</project>
