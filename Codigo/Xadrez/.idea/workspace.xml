@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0aac66c5-21f5-4f1f-b362-50dfeb102b5a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/peças/Bispo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Bispo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/peças/Cavalo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Cavalo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/peças/Peao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Peao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/peças/Peça.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Peça.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/peças/Rainha.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Rainha.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/peças/Rei.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Rei.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/peças/Torre.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/peças/Torre.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/principal/Tela.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/principal/Tela.java" afterDir="false" />
-    </list>
+    <list default="true" id="0aac66c5-21f5-4f1f-b362-50dfeb102b5a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,16 +29,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Principal.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Tela.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/DANIEL/Documents/GitHub/Trabalho-Reginaldo-3/Xadrez/images/peça&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Principal.executor": "Run",
+    "Application.Tela.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/DANIEL/Documents/GitHub/Trabalho-Reginaldo-3/Codigo/Xadrez"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DANIEL\Documents\GitHub\Trabalho-Reginaldo-3\Xadrez\images\peça" />
