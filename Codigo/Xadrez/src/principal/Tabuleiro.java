@@ -2,7 +2,7 @@ package principal;
 
 import java.awt.*;
 
-public class Tabuleiro {
+public class Tabuleiro implements DesenhaTabuleiro {
 
     public static final int tamanho = 64;
 
