@@ -13,6 +13,9 @@ public class Tela extends JPanel implements Runnable {
     boolean fimDeJogo = false;
     private boolean promocaoPendente = false;
 
+    public static final int branco = 0;
+    public static final int preto = 1;
+
     private int colunaIlegal = -1; // -1 significa que não há quadrado ilegal
     private int linhaIlegal = -1;
     Interagir interagir = new Interagir();
@@ -26,15 +29,11 @@ public class Tela extends JPanel implements Runnable {
     private final double intervalo = 1000000000.0 / FPS; // Intervalo entre frames em nanosegundos
     Tabuleiro tabuleiro = new Tabuleiro();
 
-    public static final int branco = 0;
-    public static final int preto = 1;
+
     int corAtual = branco;
 
     public static ArrayList<Peça> pecas = new ArrayList<>();
     public static ArrayList<Peça> copiaPecas = new ArrayList<>();
-
-    // Outros atributos e métodos da classe Tela
-
     // 1. Instância única da classe
     private static Tela instancia;
 
@@ -50,7 +49,7 @@ public class Tela extends JPanel implements Runnable {
     }
 
     // 3. Método estático para acessar a instância única
-    public static Tela getInstance() {
+    public static synchronized Tela getInstance() {
         if (instancia == null) {
             instancia = new Tela();
         }
@@ -570,10 +569,8 @@ public class Tela extends JPanel implements Runnable {
         pecas.add(new Rainha(branco, 3, 7));
         pecas.add(new Rei(branco, 4, 7));
 
-//        pecas.add(new Peao(branco,7,6));
 //        pecas.add(new Rei(branco,3,7));
 //        pecas.add(new Rei(preto,0,3));
-//        pecas.add(new Bispo(preto,1,4));
 //        pecas.add(new Rainha(preto,4,5));
 
 

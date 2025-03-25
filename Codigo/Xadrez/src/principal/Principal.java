@@ -3,7 +3,6 @@ package principal;
 import javax.swing.*;
 
 public class Principal {
-
     public static void main(String[] args) {
         // Criando a janela (JFrame)
         JFrame janela = new JFrame("Xadrez - Trabalho final Reginaldo");

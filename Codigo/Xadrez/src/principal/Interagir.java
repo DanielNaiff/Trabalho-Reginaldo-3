@@ -1,8 +1,6 @@
 package principal;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 public class Interagir extends MouseAdapter {
 
     public boolean clicou;
@@ -29,6 +27,5 @@ public class Interagir extends MouseAdapter {
     @Override
     public void mouseReleased(MouseEvent e) {
         clicou = false;
-
     }
 }
